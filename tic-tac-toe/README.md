@@ -1,8 +1,13 @@
-# Phaser Vite Template
+# Phaser Playground: Tic-Tac-Toe
 
-This is a Phaser 3 project template that uses Vite for bundling. It supports hot-reloading for quick development workflow and includes scripts to generate production-ready builds.
+This is a simple Tic-Tac-Toe game built with Phaser 3 as part of the Phaser Playground project. It features:
 
-**[This Template is also available as a TypeScript version.](https://github.com/phaserjs/template-vite-ts)**
+- Clean, responsive gameplay
+- Visual celebrations for wins and draws
+- Interactive menus and game over screens
+- Handshake animation for draws and confetti for wins
+
+![Tic-Tac-Toe Screenshot](screenshot.png)
 
 ### Versions
 
@@ -11,30 +16,43 @@ This template has been updated for:
 - [Phaser 3.88.2](https://github.com/phaserjs/phaser)
 - [Vite 5.3.1](https://github.com/vitejs/vite)
 
-![screenshot](screenshot.png)
+![gameplay](tic-tac-toe-gameplay.png)
 
 ## Requirements
 
-[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
+This project uses [Bun](https://bun.sh/) instead of npm for faster and more efficient package management. If you don't have Bun installed, you can install it with:
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
 
 ## Available Commands
 
 | Command | Description |
 |---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm run dev` | Launch a development web server |
-| `npm run build` | Create a production build in the `dist` folder |
-| `npm run dev-nolog` | Launch a development web server without sending anonymous data (see "About log.js" below) |
-| `npm run build-nolog` | Create a production build in the `dist` folder without sending anonymous data (see "About log.js" below) |
+| `bun install` | Install project dependencies |
+| `bun run dev` | Launch a development web server |
+| `bun run build` | Create a production build in the `dist` folder |
+| `bun run dev-nolog` | Launch a development web server without sending anonymous data |
+| `bun run build-nolog` | Create a production build without sending anonymous data |
 
 
-## Writing Code
+## Getting Started
 
-After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server by running `npm run dev`.
+After cloning the repo, run `bun install` from your project directory to install all dependencies. Then, start the local development server by running `bun run dev`.
 
-The local development server runs on `http://localhost:8080` by default. Please see the Vite documentation if you wish to change this, or add SSL support.
+The local development server runs on `http://localhost:8080` by default (you can see the exact URL in the terminal output). Your default browser should open automatically.
 
-Once the server is running you can edit any of the files in the `src` folder. Vite will automatically recompile your code and then reload the browser.
+Once the server is running, you can play the game immediately:
+
+1. Click "Play Game" on the main menu
+2. Players take turns placing X's and O's on the 3x3 grid
+3. First player to get three in a row (horizontally, vertically, or diagonally) wins
+4. If all cells are filled with no winner, it's a draw
+
+## Development
+
+When you make changes to the game code in the `src` folder, Vite will automatically recompile and reload the browser. The main game logic is in `src/game/scenes/Game.js`.
 
 ## Template Project Structure
 
@@ -49,6 +67,31 @@ We have provided a default project structure to get you started. This is as foll
 | `src/game`                   | Folder containing the game code.                           |
 | `src/game/main.js`           | Game entry point: configures and starts the game.          |
 | `src/game/scenes`            | Folder with all Phaser game scenes.                        | 
+
+## Project Structure
+
+The game is organized into the following key files:
+
+| File | Description |
+|------|-------------|
+| `src/game/main.js` | Game configuration and initialization |
+| `src/game/scenes/Boot.js` | Initial loading scene |
+| `src/game/scenes/Preloader.js` | Loads all game assets |
+| `src/game/scenes/MainMenu.js` | Main menu with "Play Game" button |
+| `src/game/scenes/Game.js` | The main game logic for Tic-Tac-Toe |
+| `src/game/scenes/GameOver.js` | Game over screen with replay option |
+| `public/assets/` | Game assets (images, SVGs) |
+
+## Game Features
+
+- **Clean visual design**: Simple but effective UI
+- **Player turns**: X and O take turns placing their marks
+- **Win detection**: Automatically detects wins in rows, columns, and diagonals
+- **Draw detection**: Detects when the game ends in a draw
+- **Animations**: 
+  - Winning animations with confetti and highlighting the winning line
+  - Draw animations with a handshake visual
+- **Restart options**: Play again or return to main menu
 
 ## Handling Assets
 
@@ -89,65 +132,73 @@ In order to deploy your game, you will need to upload *all* of the contents of t
 
 If you want to customize your build, such as adding plugin (i.e. for loading CSS or fonts), you can modify the `vite/config.*.mjs` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json`. Please see the [Vite documentation](https://vitejs.dev/) for more information.
 
-## About log.js
+## Using Bun Instead of npm
 
-If you inspect our node scripts you will see there is a file called `log.js`. This file makes a single silent API call to a domain called `gryzor.co`. This domain is owned by Phaser Studio Inc. The domain name is a homage to one of our favorite retro games.
+This project has been configured to use [Bun](https://bun.sh/) instead of npm. Bun offers several advantages:
 
-We send the following 3 pieces of data to this API: The name of the template being used (vue, react, etc). If the build was 'dev' or 'prod' and finally the version of Phaser being used.
+- **Speed**: Bun is significantly faster than npm for package installations and scripts
+- **Modern JavaScript**: Better support for modern JS features
+- **All-in-one tool**: Acts as a package manager, bundler, test runner, and more
 
-At no point is any personal data collected or sent. We don't know about your project files, device, browser or anything else. Feel free to inspect the `log.js` file to confirm this.
+### Migrating from npm to Bun
 
-Why do we do this? Because being open source means we have no visible metrics about which of our templates are being used. We work hard to maintain a large and diverse set of templates for Phaser developers and this is our small anonymous way to determine if that work is actually paying off, or not. In short, it helps us ensure we're building the tools for you.
+If you've used this template with npm before, you can easily switch to Bun:
 
-However, if you don't want to send any data, you can use these commands instead:
+1. Install Bun: `curl -fsSL https://bun.sh/install | bash`
+2. Run `bun install` to generate a `bun.lock` file
+3. Use `bun run [script-name]` instead of `npm run [script-name]`
 
-Dev:
+All the scripts in package.json work the same way with Bun.
+
+### Anonymous Usage Data Note
+
+This template includes a `log.js` file that sends anonymous usage data to Phaser Studio. If you prefer not to send this data, use the `-nolog` commands:
 
 ```bash
-npm run dev-nolog
+bun run dev-nolog
 ```
 
-Build:
+or 
 
 ```bash
-npm run build-nolog
+bun run build-nolog
 ```
 
-Or, to disable the log entirely, simply delete the file `log.js` and remove the call to it in the `scripts` section of `package.json`:
+## Building for Production
 
-Before:
+To create a production build:
 
-```json
-"scripts": {
-    "dev": "node log.js dev & dev-template-script",
-    "build": "node log.js build & build-template-script"
-},
+```bash
+bun run build
 ```
 
-After:
+The optimized files will be output to the `dist` folder. These can be deployed to any static web server.
 
-```json
-"scripts": {
-    "dev": "dev-template-script",
-    "build": "build-template-script"
-},
-```
+## Extending the Game
 
-Either of these will stop `log.js` from running. If you do decide to do this, please could you at least join our Discord and tell us which template you're using! Or send us a quick email. Either will be super-helpful, thank you.
+Some ideas for extending this Tic-Tac-Toe game:
 
-## Join the Phaser Community!
+- Add sounds for placing markers, winning, and draws
+- Implement different themes or skins for the game board and markers
+- Add a difficulty setting with AI opponents
+- Create a score tracking system
+- Add network multiplayer functionality
 
-We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
+## Credits
+
+This Tic-Tac-Toe game is built with [Phaser 3](https://phaser.io/), a powerful open-source framework for making HTML5 games.
+
+### Phaser Community
+
+If you're interested in game development with Phaser:
 
 **Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser Twitter](https://twitter.com/phaser_)<br />
-**Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
-**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
-**Discord:** Join us on [Discord](https://discord.gg/phaser)<br />
-**Code:** 2000+ [Examples](https://labs.phaser.io)<br />
-**Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
+**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/)<br />
+**Discord:** Join on [Discord](https://discord.gg/phaser)<br />
+**Examples:** 2000+ [Code Examples](https://labs.phaser.io)<br />
 
-Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
+## License
+
+This Tic-Tac-Toe implementation is available under the MIT License. See the LICENSE file for more information.
 
 The Phaser logo and characters are &copy; 2011 - 2025 Phaser Studio Inc.
-
-All rights reserved.
