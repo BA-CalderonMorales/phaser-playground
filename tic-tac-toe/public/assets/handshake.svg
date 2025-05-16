@@ -1,0 +1,12 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Left hand -->
+  <path d="M10,60 C15,55 20,50 22,40 C25,30 35,35 33,45 C32,50 30,55 28,60 L10,60 Z" fill="#f0a050" stroke="#000" stroke-width="2"/>
+  <!-- Right hand -->
+  <path d="M90,60 C85,55 80,50 78,40 C75,30 65,35 67,45 C68,50 70,55 72,60 L90,60 Z" fill="#f0a050" stroke="#000" stroke-width="2"/>
+  <!-- Handshake grip -->
+  <path d="M28,60 C28,64 30,68 40,68 C48,68 52,64 50,60 L28,60 Z" fill="#e89040" stroke="#000" stroke-width="2"/>
+  <path d="M72,60 C72,64 70,68 60,68 C52,68 48,64 50,60 L72,60 Z" fill="#e89040" stroke="#000" stroke-width="2"/>
+  <!-- Thumb details -->
+  <path d="M10,60 C10,56 15,58 20,58 L28,60 L20,62 C15,62 10,64 10,60 Z" fill="#e89040" stroke="#000" stroke-width="2"/>
+  <path d="M90,60 C90,56 85,58 80,58 L72,60 L80,62 C85,62 90,64 90,60 Z" fill="#e89040" stroke="#000" stroke-width="2"/>
+</svg>

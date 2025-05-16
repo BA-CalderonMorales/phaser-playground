@@ -67,6 +67,7 @@ export class GameOver extends Scene
 
         // Button actions
         playAgainButton.on('pointerdown', () => {
+            // Start the Game scene which will reset the board
             this.scene.start('Game');
         });
 

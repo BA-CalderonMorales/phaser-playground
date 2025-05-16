@@ -23,6 +23,15 @@ export class Game extends Scene
 
     create ()
     {
+        // Reset the game state whenever the scene is created
+        this.board = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ];
+        this.currentPlayer = 1;
+        this.gameOver = false;
+        
         this.cameras.main.setBackgroundColor(0x0a0a3c);
 
         this.add.image(512, 384, 'background').setAlpha(0.3);
@@ -59,27 +68,6 @@ export class Game extends Scene
 
         // Create the game board
         this.createBoard();
-
-        // Add reset button
-        const resetButton = this.add.text(512, 650, 'Reset Game', {
-            fontFamily: 'Arial Black', 
-            fontSize: 24, 
-            color: '#ffffff',
-            backgroundColor: '#222222',
-            padding: { x: 20, y: 10 }
-        }).setOrigin(0.5).setInteractive();
-
-        resetButton.on('pointerdown', () => {
-            this.resetGame();
-        });
-
-        resetButton.on('pointerover', () => {
-            resetButton.setStyle({ backgroundColor: '#444444' });
-        });
-
-        resetButton.on('pointerout', () => {
-            resetButton.setStyle({ backgroundColor: '#222222' });
-        });
     }
 
     createBoard() {
@@ -200,9 +188,10 @@ export class Game extends Scene
         if (this.checkDraw()) {
             this.gameOver = true;
             this.statusText.setText('It\'s a Draw!');
+            this.celebrateDraw(); // Celebrate the draw
             
             // Allow returning to menu after a delay
-            this.time.delayedCall(3000, () => {
+            this.time.delayedCall(5000, () => {
                 if (this.gameOver) {
                     this.scene.start('GameOver');
                 }
@@ -275,6 +264,34 @@ export class Game extends Scene
         this.currentPlayer = 1;
         this.gameOver = false;
         this.statusText.setText('Player X Turn');
+        
+        // Clean up particles and winning line
+        if (this.particles) {
+            this.particles.destroy();
+            this.particles = null;
+        }
+        
+        if (this.winningLine) {
+            this.winningLine.destroy();
+            this.winningLine = null;
+        }
+        
+        // Clean up celebration text and images
+        if (this.winnerText) {
+            this.winnerText.destroy();
+            this.winnerText = null;
+        }
+        
+        // Clean up draw elements
+        if (this.drawText) {
+            this.drawText.destroy();
+            this.drawText = null;
+        }
+        
+        if (this.drawImage) {
+            this.drawImage.destroy();
+            this.drawImage = null;
+        }
         
         // Recreate the board
         this.createBoard();
@@ -360,7 +377,7 @@ export class Game extends Scene
         
         // Display winner animation
         const winnerColor = winner === 'X' ? '#ff4444' : '#44aaff';
-        const winnerText = this.add.text(512, 280, `PLAYER ${winner} WINS!`, {
+        this.winnerText = this.add.text(512, 280, `PLAYER ${winner} WINS!`, {
             fontFamily: 'Arial Black',
             fontSize: 48,
             color: winnerColor,
@@ -378,7 +395,7 @@ export class Game extends Scene
         
         // Animate the winner text
         this.tweens.add({
-            targets: winnerText,
+            targets: this.winnerText,
             alpha: 1,
             y: 240,
             scale: 1.2,
@@ -386,13 +403,85 @@ export class Game extends Scene
             ease: 'Bounce.easeOut',
             onComplete: () => {
                 this.tweens.add({
-                    targets: winnerText,
+                    targets: this.winnerText,
                     scale: 1,
                     duration: 300,
                     yoyo: true,
                     repeat: 4
                 });
             }
+        });
+        
+        // Stop particle emission after a delay
+        this.time.delayedCall(3000, () => {
+            if (this.particles) {
+                this.particles.emitting = false;
+            }
+        });
+    }
+    
+    celebrateDraw() {
+        // Create slow-falling confetti effect for draw
+        this.particles = this.add.particles(0, 0, 'confetti', {
+            x: { min: 0, max: this.game.config.width },
+            y: -50,
+            angle: { min: 0, max: 360 },
+            speed: { min: 100, max: 200 }, // Slower than win celebration
+            gravityY: 100, // Lighter fall than win celebration
+            lifespan: 5000,
+            quantity: 0.5, // Less particles than win celebration
+            scale: { min: 0.1, max: 0.3 },
+            rotate: { min: 0, max: 360 },
+            tint: [ 0xCCCCCC, 0xFFFFFF, 0x888888, 0xAAAAAA ], // More neutral colors for draw
+            emitting: true
+        });
+        
+        // Add handshake animation
+        this.drawImage = this.add.image(512, 280, 'handshake').setScale(0).setOrigin(0.5);
+        
+        // Animate the handshake
+        this.tweens.add({
+            targets: this.drawImage,
+            scale: 0.5, // Scale to appropriate size
+            duration: 1000,
+            ease: 'Back.easeOut',
+            onComplete: () => {
+                // Add gentle rocking motion
+                this.tweens.add({
+                    targets: this.drawImage,
+                    angle: { from: -5, to: 5 },
+                    duration: 1000,
+                    yoyo: true,
+                    repeat: 3
+                });
+            }
+        });
+        
+        // Display draw text
+        this.drawText = this.add.text(512, 380, "IT'S A DRAW!", {
+            fontFamily: 'Arial Black',
+            fontSize: 40,
+            color: '#ffcc00',
+            stroke: '#000000',
+            strokeThickness: 8,
+            align: 'center',
+            shadow: {
+                offsetX: 2,
+                offsetY: 2,
+                color: '#000',
+                blur: 5,
+                fill: true
+            }
+        }).setOrigin(0.5).setAlpha(0);
+        
+        // Animate the draw text
+        this.tweens.add({
+            targets: this.drawText,
+            alpha: 1,
+            y: 370,
+            duration: 800,
+            ease: 'Cubic.easeOut',
+            delay: 500
         });
         
         // Stop particle emission after a delay
